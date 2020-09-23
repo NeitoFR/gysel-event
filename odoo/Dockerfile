@@ -1,0 +1,3 @@
+FROM odoo:12.0
+
+COPY ./odoo.conf /etc/odoo/odoo.conf

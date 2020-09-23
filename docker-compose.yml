@@ -1,0 +1,62 @@
+version: '3.4'
+
+services:
+  
+  nginx: 
+    build: ./nginx
+    container_name: nginx
+    hostname: nginx
+    restart: always
+    ports:
+      - 80:80
+
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    hostname: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - 9000:9000
+
+
+  pg_admin:
+    image: dpage/pgadmin4:latest
+    container_name: pg_admin
+    hostname: pg_admin
+    restart: always
+    env_file: ./pgadmin/pgadmin-env.list 
+    volumes: 
+      - pgadmin_data:/var/lib/pgadmin
+      
+  postgres:
+    image: postgres:10.10-alpine
+    container_name: postgres
+    hostname: postgres
+    restart: always
+    env_file: ./postgres/pg-env.list
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    
+  odoo: 
+    build: ./odoo
+    container_name: odoo
+    hostname: odoo
+    restart: always
+    ports: 
+      - 8069:8069
+    volumes:
+      - odoo_data:/var/lib/odoo
+
+volumes: 
+    portainer_data:
+    postgres_data:
+    pgadmin_data:
+    odoo_data:
+
+networks: 
+  default:
+    external:
+      name: gysel_network
