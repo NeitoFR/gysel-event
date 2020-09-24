@@ -30,7 +30,20 @@ services:
     env_file: ./pgadmin/pgadmin-env.list 
     volumes: 
       - pgadmin_data:/var/lib/pgadmin
-      
+
+  # web:
+  #   image: odoo:12.0
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - "8069:8069"
+  # db:
+  #   image: postgres:10
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_PASSWORD=odoo
+  #     - POSTGRES_USER=odoo
+
   postgres:
     image: postgres:10.10-alpine
     container_name: postgres
@@ -42,6 +55,8 @@ services:
     
   odoo: 
     build: ./odoo
+    depends_on:
+      - postgres
     container_name: odoo
     hostname: odoo
     restart: always
